@@ -148,4 +148,3 @@ Chưa có dữ liệu được cung cấp để ghi nhận B1, B2 hoặc B3.
 - `docs/GUIDELINE.md` và `docs/MOT_FORMAT.md` trong repository.
 - CVAT local server `2.74.1`; log tạo task ghi SDK `2.82.0` và cảnh báo lệch phiên bản.
 - `src/check_submission.py`: kết quả được chép từ log người dùng cung cấp.
-- ChatGPT: hỗ trợ biên tập báo cáo từ file export và thông tin/log đã cung cấp; không tự điền các quan sát CP0, quyết định CP2, kết quả CP3 hoặc trạng thái completed khi chưa có bằng chứng.
