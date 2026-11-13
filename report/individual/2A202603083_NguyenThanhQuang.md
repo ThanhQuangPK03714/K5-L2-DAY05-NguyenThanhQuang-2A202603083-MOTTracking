@@ -59,7 +59,11 @@ Bản xuất được checker báo 0 frame `occluded` và 0 lần bật `outside
 - Quyết định giữ cùng ID / tạo track mới: Chưa có thông tin về quyết định CP2.
 - Lý do theo ngưỡng 60 frame, ngoại hình, hướng đi và tốc độ: Chưa có ghi chép để xác nhận.
 
-Ảnh chụp màn hình CP2: chưa có trong thư mục báo cáo tại thời điểm hoàn thiện file này; chưa chèn ảnh để tránh dùng nhầm ảnh minh họa thành bằng chứng của job này.
+Ba tệp ảnh CP2 có trong `report/individual/images/` và được ghi nhận trong commit `6d43863`. Tuy vậy, log checker vẫn báo 0 frame `occluded` và 0 lần bật `outside`; ảnh tĩnh và tên file chưa đủ để xác nhận các mốc CP2 hoặc việc chúng cùng thể hiện một track liên tục. Vì vậy các mốc và quyết định CP2 phía trên vẫn để chưa xác nhận.
+
+![Ảnh CP2: che_1_truoc](images/che_1_truoc.png)
+![Ảnh CP2: che_2_giua](images/che_2_giua.png)
+![Ảnh CP2: che_3_sau](images/che_3_sau.png)
 
 ## 4. Tự review ID (CP3)
 
