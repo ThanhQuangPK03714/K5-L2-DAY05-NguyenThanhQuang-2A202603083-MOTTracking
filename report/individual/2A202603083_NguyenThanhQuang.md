@@ -15,51 +15,49 @@
 
 ## 1. Xem trước đoạn video (CP0)
 
-Ảnh nhận diện đề B cung cấp các frame tham chiếu dưới đây. Đây chỉ là frame dùng để nhận diện, không đủ để xác nhận frame xuất hiện đầu tiên, frame cuối cùng hoặc diễn biến che khuất.
+Đề B trong `src/lab_variants.json` giao các ID nguồn MOT17 `[1, 19, 20, 21, 22]`. Đối chiếu điểm tham chiếu với các box trong `annotations.xml` cho thấy P1–P4 khớp lần lượt Track 3, 0, 1, 2. P5 chưa khớp với box nào tại frame tham chiếu.
 
-| Mã | Frame xuất hiện | Frame cuối thấy được | Rẽ / dừng / đổi tốc độ ở frame | Bị che ở frame | Ghi chú |
+| Mã | ID nguồn | Frame tham chiếu | Track CVAT khớp | Khoảng frame có box trong bản xuất | Rẽ / dừng / đổi tốc độ; che khuất |
 |---|---:|---:|---|---|---|
-| P1 | Chưa ghi | Chưa ghi | Chưa ghi | Chưa ghi | Frame tham chiếu nhận diện: 0 |
-| P2 | Chưa ghi | Chưa ghi | Chưa ghi | Chưa ghi | Frame tham chiếu nhận diện: 0 |
-| P3 | Chưa ghi | Chưa ghi | Chưa ghi | Chưa ghi | Frame tham chiếu nhận diện: 40 |
-| P4 | Chưa ghi | Chưa ghi | Chưa ghi | Chưa ghi | Frame tham chiếu nhận diện: 0 |
-| P5 | Chưa ghi | Chưa ghi | Chưa ghi | Chưa ghi | Frame tham chiếu nhận diện: 2 |
+| P1 | 1 | 0 | Track 3 | 0–149 | Không có ghi chép CP0; XML không bật `occluded`/`outside` |
+| P2 | 19 | 0 | Track 0 | 0–149 | Không có ghi chép CP0; XML không bật `occluded`/`outside` |
+| P3 | 20 | 40 | Track 1 | 0–149 | Không có ghi chép CP0; XML không bật `occluded`/`outside` |
+| P4 | 21 | 0 | Track 2 | 0–149 | Không có ghi chép CP0; XML không bật `occluded`/`outside` |
+| P5 | 22 | 2 | Chưa khớp | Không xác định | Điểm tham chiếu `(1331, 508)` không nằm trong box nào ở frame 2; cần kiểm tra lại track |
 
-Chưa có ghi chép CP0 trước khi vẽ để điền các mốc và chuyển động còn thiếu.
+Các khoảng frame trên là khoảng có box trong bản xuất, không chứng minh người thật sự được bám đúng ở mọi frame. Riêng Track 2 giữ nguyên tọa độ box từ frame 37 đến 149 và Track 4 giữ nguyên box từ frame 21 đến 149; cần đối chiếu lại trên video trước khi xem các khoảng này là thời gian xuất hiện thật. Hai ZIP không có video/ảnh frame và không lưu ghi chép xem trước, nên không thể phục hồi hồi tưởng CP0 về các lần rẽ, dừng, đổi tốc độ hay che khuất.
 
 ## 2. Keyframe và thời gian (CP1, CP4)
 
-Kết quả kiểm tra ghi ID track trong file CVAT là 0–4; log không ghi ánh xạ các ID này sang P1–P5. Vì vậy bảng dưới đây giữ nguyên ID track thay vì gán P theo suy đoán.
+Ánh xạ P/Track dưới đây được đối chiếu từ điểm tham chiếu của đề B (`src/lab_variants.json`) với tọa độ box trong bản xuất. P5 chưa ánh xạ được. Thời gian thao tác từng track không có trong hai ZIP nên không thể điền số phút mà không suy đoán.
 
-| P / ID trong CVAT | Số keyframe | Keyframe ở frame | Số frame có mặt | Keyframe / 100 frame | Thời gian (phút) | Chỗ khó |
+| P / ID trong CVAT | Số keyframe | Keyframe ở frame | Số frame có box | Keyframe / 100 frame | Thời gian (phút) | Chỗ cần chú ý từ bản xuất |
 |---|---:|---|---:|---:|---|---|
-| Chưa ánh xạ / Track 0 | 23 | 0, 1, 3, 11, 14, 15, 16, 22, 28, 42, 52, 58, 65, 77, 85, 90, 102, 109, 120, 126, 137, 142, 149 | 150 | 15.3 | Chưa ghi | Chưa ghi |
-| Chưa ánh xạ / Track 1 | 27 | 0, 13, 16, 18, 25, 35, 43, 51, 58, 66, 72, 81, 88, 93, 98, 104, 106, 111, 115, 120, 124, 128, 133, 137, 141, 145, 149 | 150 | 18.0 | Chưa ghi | Chưa ghi |
-| Chưa ánh xạ / Track 2 | 9 | 0, 3, 5, 8, 13, 18, 24, 30, 37 | 150 | 6.0 | Chưa ghi | Chưa ghi |
-| Chưa ánh xạ / Track 3 | 24 | 0, 5, 11, 18, 26, 32, 45, 56, 59, 64, 68, 72, 80, 84, 87, 92, 103, 115, 116, 118, 121, 128, 148, 149 | 150 | 16.0 | Chưa ghi | Chưa ghi |
-| Chưa ánh xạ / Track 4 | 1 | 21 | 129 | 0.8 | Chưa ghi | Checker cảnh báo chỉ có 1 keyframe cho 129 frame; cần xem lại box trôi |
-| **Tổng** | **84** | — | **729** | **11.5** | Chưa ghi | — |
+| P2 / Track 0 | 23 | 0, 1, 3, 11, 14, 15, 16, 22, 28, 42, 52, 58, 65, 77, 85, 90, 102, 109, 120, 126, 137, 142, 149 | 150 | 15.3 | Không có trong ZIP | P2 khớp điểm tham chiếu frame 0 |
+| P3 / Track 1 | 27 | 0, 13, 16, 18, 25, 35, 43, 51, 58, 66, 72, 81, 88, 93, 98, 104, 106, 111, 115, 120, 124, 128, 133, 137, 141, 145, 149 | 150 | 18.0 | Không có trong ZIP | P3 khớp điểm tham chiếu frame 40 |
+| P4 / Track 2 | 9 | 0, 3, 5, 8, 13, 18, 24, 30, 37 | 150 | 6.0 | Không có trong ZIP | Box giữ nguyên tọa độ từ frame 37 đến 149; nên kiểm tra drift/lost |
+| P1 / Track 3 | 24 | 0, 5, 11, 18, 26, 32, 45, 56, 59, 64, 68, 72, 80, 84, 87, 92, 103, 115, 116, 118, 121, 128, 148, 149 | 150 | 16.0 | Không có trong ZIP | P1 khớp điểm tham chiếu frame 0 |
+| Chưa ánh xạ / Track 4 | 1 | 21 | 129 | 0.8 | Không có trong ZIP | Box ở frame 21 và giữ nguyên tọa độ đến frame 149; cần kiểm tra drift và danh tính |
+| **Tổng** | **84** | — | **729** | **11.5** | Không có trong ZIP | — |
 
-Keyframe / 100 frame của cả bài = 84 ÷ 729 × 100 = **11.5**.
-
-Track 1 có nhiều keyframe nhất (27; 18.0 keyframe/100 frame). Log chỉ có số lượng và vị trí keyframe, không cho biết lý do đặt nhiều keyframe; chưa có ghi chú quan sát để kết luận về rẽ, dừng, thay đổi kích thước hay che khuất.
+Keyframe / 100 frame của cả bài = 84 ÷ 729 × 100 = **11.5**. Track 1 có nhiều keyframe nhất (27; 18.0/100 frame). Track 4 có 1 keyframe cho 129 frame, đúng với cảnh báo của checker. Track 2 có 9 keyframe nhưng frame cuối cùng có keyframe là 37; các tọa độ từ frame 37 đến 149 đều giống nhau. Hai trường hợp này cần xem lại trong CVAT. Tọa độ và số keyframe không cho biết lý do người gán đặt từng keyframe; thời gian thao tác cũng không được lưu trong ZIP.
 
 ## 3. Đoạn bị che (CP2)
 
-Bản xuất được checker báo 0 frame `occluded` và 0 lần bật `outside` trên cả năm track. Do đó file hiện có không ghi một đoạn che khuất để điền các mốc CP2.
+Trong `annotations.xml`, cả năm track đều có **0 frame `occluded`** và **0 lần bật `outside`**. Vì vậy bản xuất hiện tại không ghi lại các mốc che khuất CP2.
 
-| Mốc | Frame |
+| Mốc | Frame trong bản xuất |
 |---|---:|
-| Bắt đầu bị che một phần (bật `occluded`) | Không ghi trong bản xuất |
-| Mất hẳn (bật `outside`) | Không ghi trong bản xuất |
-| Hiện lại (tắt `outside`) | Không ghi trong bản xuất |
-| Thấy rõ trở lại (tắt `occluded`) | Không ghi trong bản xuất |
+| Bắt đầu bị che một phần (`occluded` bật) | Không có trong XML |
+| Mất hẳn (`outside` bật) | Không có trong XML |
+| Hiện lại (`outside` tắt) | Không có trong XML |
+| Thấy rõ trở lại (`occluded` tắt) | Không có trong XML |
 
-- Thời gian khuất hẳn: Không tính được từ bản xuất vì không có lần bật `outside`.
-- Quyết định giữ cùng ID / tạo track mới: Chưa có thông tin về quyết định CP2.
-- Lý do theo ngưỡng 60 frame, ngoại hình, hướng đi và tốc độ: Chưa có ghi chép để xác nhận.
+- Thời gian khuất hẳn: Không tính được vì không có lần bật `outside`.
+- Quyết định giữ cùng ID / tạo track mới: Không có thông tin về quyết định CP2 trong hai ZIP.
+- Lý do theo ngưỡng 60 frame, ngoại hình, hướng đi và tốc độ: Không có ghi chép trong hai ZIP.
 
-Ba tệp ảnh CP2 có trong `report/individual/images/` và được ghi nhận trong commit `6d43863`. Tuy vậy, log checker vẫn báo 0 frame `occluded` và 0 lần bật `outside`; ảnh tĩnh và tên file chưa đủ để xác nhận các mốc CP2 hoặc việc chúng cùng thể hiện một track liên tục. Vì vậy các mốc và quyết định CP2 phía trên vẫn để chưa xác nhận.
+Ba ảnh CP2 nằm trong `report/individual/images/`, nhưng file ảnh không cung cấp mốc frame đủ để đối chiếu và bản xuất không có cờ che khuất. Vì vậy ảnh không xác nhận được bốn mốc CP2 hoặc việc cùng một track được giữ trước và sau đoạn khuất.
 
 ![Ảnh CP2: che_1_truoc](images/che_1_truoc.png)
 ![Ảnh CP2: che_2_giua](images/che_2_giua.png)
@@ -81,15 +79,17 @@ Lỗi chỉ phát hiện ở lượt 2: chưa có kết quả review để xác 
 
 | Kiểm tra | Kết quả |
 |---|---|
-| Tên file MOT 1.1 | `NguyenThanhQuang_mot.zip` |
-| Tên file CVAT for video 1.1 | `NguyenThanhQuang_cvat_video.zip` |
-| Số track ID khác nhau trong `gt/gt.txt` | 5 — đúng yêu cầu |
-| Frame `outside` không có dòng trong `gt.txt` | Đúng theo checker; log báo không có frame nào bật `outside` |
-| Job đã completed trên CVAT máy cá nhân | Chưa có thông tin xác nhận; log chỉ cho biết task 16/job 16 đã được tạo |
+| Tên file MOT 1.1 | `NguyenThanhQuang_mot.zip` (chứa `gt/gt.txt`, `gt/labels.txt`) |
+| Tên file CVAT for video 1.1 | `NguyenThanhQuang_cvat_video.zip` (chứa `annotations.xml`) |
+| Số track ID khác nhau trong `gt/gt.txt` | 5; đúng số lượng ID theo checker, nhưng chưa xác nhận đủ 5 người đề B được gán đúng |
+| Số box trong `gt/gt.txt` | 729 |
+| Cờ `occluded` / `outside` trong CVAT XML | 0 frame `occluded`, 0 lần bật `outside` |
+| Đối chiếu P5 đề B | Điểm tham chiếu frame 2 `(1331, 508)` không nằm trong box nào; Track 4 bắt đầu ở frame 21 tại vùng `(248.74, 513.74)–(292.55, 581.10)` và giữ nguyên box đến frame 149. Cần kiểm tra lại trong CVAT |
+| Job đã completed trên CVAT máy cá nhân | Không xác định từ ZIP; `annotations.xml` không lưu trạng thái completed |
 
-Khi tạo task, log báo server CVAT `2.74.1` không tương thích hoàn toàn với SDK `2.82.0`; task và job sau đó vẫn được tạo. Mật khẩu không được ghi vào báo cáo.
+Metadata XML ghi job 16, 150 frame, tạo lúc 16:48:14 và cập nhật lúc 17:25:44 (GMT+7); bản xuất được tạo lúc 17:31:43 (GMT+7). Các thời điểm này không chứng minh trạng thái completed. Log tạo task ghi server CVAT `2.74.1` và SDK `2.82.0`; task/job vẫn được tạo. Mật khẩu không được ghi vào báo cáo.
 
-Tóm tắt `src/check_submission.py` theo log đã cung cấp:
+Kết quả chạy `src/check_submission.py` trên hai ZIP hiện tại:
 
 ```text
 Số frame in theo CVAT (bắt đầu từ 0). Trong gt.txt, frame_id = frame CVAT + 1.
@@ -128,7 +128,7 @@ Số frame in theo CVAT (bắt đầu từ 0). Trong gt.txt, frame_id = frame CV
   Không có lỗi định dạng. Mở CVAT xem lại từng [CẢNH BÁO]; cảnh báo đúng ý bạn thì ghi lý do vào báo cáo.
 ```
 
-Lỗi định dạng: 0; cảnh báo: 1. Cảnh báo duy nhất là Track 4 có 1 keyframe cho 129 frame. Chưa có xác nhận rằng box đã được tua xem hoặc không bị trôi.
+Lỗi định dạng: 0; cảnh báo: 1. Cảnh báo là Track 4 có một keyframe cho 129 frame. Checker chỉ kiểm cấu trúc/số liệu; kết quả 5 ID không xác nhận mỗi ID đúng một người, đủ 5 người được giao, hay box không bị trôi.
 
 ## 6. Ba câu kết
 
@@ -140,11 +140,12 @@ Lỗi định dạng: 0; cảnh báo: 1. Cảnh báo duy nhất là Track 4 có 
 
 ## Bonus (nếu làm)
 
-Chưa có dữ liệu được cung cấp để ghi nhận B1, B2 hoặc B3.
+Hai ZIP hiện tại không chứa dữ liệu bonus; không thể xác nhận B1, B2 hoặc B3 từ các file này.
 
 ## 7. Tài liệu tham khảo và công cụ AI đã dùng
 
-- MOT17-09 từ MOTChallenge; đoạn sử dụng gồm 150 frame.
-- `docs/GUIDELINE.md` và `docs/MOT_FORMAT.md` trong repository.
+- MOT17-09 từ MOTChallenge; đoạn sử dụng gồm 150 frame. Giấy phép CC BY-NC-SA 3.0.
+- `docs/GUIDELINE.md`, `docs/MOT_FORMAT.md` và `src/lab_variants.json` trong repository.
 - CVAT local server `2.74.1`; log tạo task ghi SDK `2.82.0` và cảnh báo lệch phiên bản.
-- `src/check_submission.py`: kết quả được chép từ log người dùng cung cấp.
+- `src/check_submission.py`: đã chạy trên hai ZIP trong `src/exports` để lấy thống kê ở mục 5.
+- ChatGPT/Codex: hỗ trợ đọc cấu trúc và số liệu trong hai ZIP, đối chiếu điểm tham chiếu đề B với box, và biên tập các mục báo cáo ngoài mục 4 và mục 6; không sinh box hoặc track ID.
