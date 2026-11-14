@@ -15,32 +15,32 @@
 
 ## 1. Xem trước đoạn video (CP0)
 
-Đề B trong `src/lab_variants.json` giao các ID nguồn MOT17 `[1, 19, 20, 21, 22]`. Đối chiếu điểm tham chiếu với các box trong `annotations.xml` cho thấy P1–P4 khớp lần lượt Track 3, 0, 1, 2. P5 chưa khớp với box nào tại frame tham chiếu.
+Đề B trong `src/lab_variants.json` giao các ID nguồn MOT17 `[1, 19, 20, 21, 22]`. Đối chiếu điểm tham chiếu với các box trong `annotations.xml` cho thấy P1–P4 khớp lần lượt Track 3, 0, 1, 2. Ảnh gốc tại mốc P5 cho thấy người cần gán đứng cạnh P4, nhưng không có box nào bao điểm tham chiếu này.
 
 | Mã | ID nguồn | Frame tham chiếu | Track CVAT khớp | Khoảng frame có box trong bản xuất | Rẽ / dừng / đổi tốc độ; che khuất |
 |---|---:|---:|---|---|---|
-| P1 | 1 | 0 | Track 3 | 0–149 | Không có ghi chép CP0; XML không bật `occluded`/`outside` |
-| P2 | 19 | 0 | Track 0 | 0–149 | Không có ghi chép CP0; XML không bật `occluded`/`outside` |
-| P3 | 20 | 40 | Track 1 | 0–149 | Không có ghi chép CP0; XML không bật `occluded`/`outside` |
-| P4 | 21 | 0 | Track 2 | 0–149 | Không có ghi chép CP0; XML không bật `occluded`/`outside` |
-| P5 | 22 | 2 | Chưa khớp | Không xác định | Điểm tham chiếu `(1331, 508)` không nằm trong box nào ở frame 2; cần kiểm tra lại track |
+| P1 | 1 | 0 | Track 3 | 0–149 | Ở các mốc ảnh đã đối chiếu, người gần cửa hàng dịch sang phải rồi chậm lại; có người qua lại cắt ngang, cần kiểm tra box quanh chỗ bị che |
+| P2 | 19 | 0 | Track 0 | 0–149 | Người mặc áo xanh đi từ phải sang trái và tiến gần camera; áp sát P3 ở nửa sau đoạn |
+| P3 | 20 | 40 | Track 1 | 0–149 | Người mặc áo polo xanh, đội mũ, đi từ mép phải sang trái và tiến gần camera; đi gần P2 ở nửa sau |
+| P4 | 21 | 0 | Track 2 | 0–149 | Bé mặc váy sáng đứng cạnh người lớn gần bảng quảng cáo; dịch chuyển ít ở các mốc đầu, vùng này bị người đi ngang che ở các mốc muộn |
+| P5 | 22 | 2 | Không có box khớp | Không có box P5 được xác nhận | Người mặc áo xanh/xám, đeo túi hồng cạnh P4 nhìn thấy tại điểm tham chiếu `(1331, 508)`; Track 4 bắt đầu ở khu vực khác và không khớp người này |
 
-Các khoảng frame trên là khoảng có box trong bản xuất, không chứng minh người thật sự được bám đúng ở mọi frame. Riêng Track 2 giữ nguyên tọa độ box từ frame 37 đến 149 và Track 4 giữ nguyên box từ frame 21 đến 149; cần đối chiếu lại trên video trước khi xem các khoảng này là thời gian xuất hiện thật. Hai ZIP không có video/ảnh frame và không lưu ghi chép xem trước, nên không thể phục hồi hồi tưởng CP0 về các lần rẽ, dừng, đổi tốc độ hay che khuất.
+Các khoảng frame trên là khoảng có box trong bản xuất, không chứng minh người thật sự được bám đúng ở mọi frame. Track 2 giữ nguyên tọa độ box từ frame 37 đến 149; Track 4 chỉ có box từ frame 21 và giữ nguyên tọa độ đến frame 149. Các ghi chú hành vi được đối chiếu lại từ ảnh gốc tại các mốc tham chiếu và mốc cách nhau 10 frame; chúng không phục hồi được hồi tưởng CP0 ban đầu hay xác định chính xác frame bắt đầu/kết thúc từng lần che khuất. Cần xem Track 2 trên CVAT để phân biệt box trôi với P4 bị che; Track 4 không khớp P5.
 
 ## 2. Keyframe và thời gian (CP1, CP4)
 
-Ánh xạ P/Track dưới đây được đối chiếu từ điểm tham chiếu của đề B (`src/lab_variants.json`) với tọa độ box trong bản xuất. P5 chưa ánh xạ được. Thời gian thao tác từng track không có trong hai ZIP nên không thể điền số phút mà không suy đoán.
+Ánh xạ P/Track dưới đây được đối chiếu từ điểm tham chiếu của đề B (`src/lab_variants.json`) với tọa độ box trong bản xuất. P5 chưa có box được gán; Track 4 không khớp điểm tham chiếu P5. Thời gian thao tác từng track không có trong hai ZIP nên không thể điền số phút mà không suy đoán.
 
 | P / ID trong CVAT | Số keyframe | Keyframe ở frame | Số frame có box | Keyframe / 100 frame | Thời gian (phút) | Chỗ cần chú ý từ bản xuất |
 |---|---:|---|---:|---:|---|---|
 | P2 / Track 0 | 23 | 0, 1, 3, 11, 14, 15, 16, 22, 28, 42, 52, 58, 65, 77, 85, 90, 102, 109, 120, 126, 137, 142, 149 | 150 | 15.3 | Không có trong ZIP | P2 khớp điểm tham chiếu frame 0 |
 | P3 / Track 1 | 27 | 0, 13, 16, 18, 25, 35, 43, 51, 58, 66, 72, 81, 88, 93, 98, 104, 106, 111, 115, 120, 124, 128, 133, 137, 141, 145, 149 | 150 | 18.0 | Không có trong ZIP | P3 khớp điểm tham chiếu frame 40 |
-| P4 / Track 2 | 9 | 0, 3, 5, 8, 13, 18, 24, 30, 37 | 150 | 6.0 | Không có trong ZIP | Box giữ nguyên tọa độ từ frame 37 đến 149; nên kiểm tra drift/lost |
+| P4 / Track 2 | 9 | 0, 3, 5, 8, 13, 18, 24, 30, 37 | 150 | 6.0 | Không có trong ZIP | Box giữ nguyên tọa độ từ frame 37; kiểm tra P4 còn hiện diện hay bị che và xem lại cờ |
 | P1 / Track 3 | 24 | 0, 5, 11, 18, 26, 32, 45, 56, 59, 64, 68, 72, 80, 84, 87, 92, 103, 115, 116, 118, 121, 128, 148, 149 | 150 | 16.0 | Không có trong ZIP | P1 khớp điểm tham chiếu frame 0 |
-| Chưa ánh xạ / Track 4 | 1 | 21 | 129 | 0.8 | Không có trong ZIP | Box ở frame 21 và giữ nguyên tọa độ đến frame 149; cần kiểm tra drift và danh tính |
-| **Tổng** | **84** | — | **729** | **11.5** | Không có trong ZIP | — |
+| Track 4 / chưa khớp người được giao | 1 | 21 | 129 | 0.8 | Không có trong ZIP | Box không khớp điểm tham chiếu P5; giữ nguyên tọa độ đến frame 149, cần xác nhận và sửa track |
+| **Tổng** | **84** | — | **729** | **11.5** | **120 phút toàn buổi** (16:00–18:00; mục 0) | Không có thời gian tách riêng theo track |
 
-Keyframe / 100 frame của cả bài = 84 ÷ 729 × 100 = **11.5**. Track 1 có nhiều keyframe nhất (27; 18.0/100 frame). Track 4 có 1 keyframe cho 129 frame, đúng với cảnh báo của checker. Track 2 có 9 keyframe nhưng frame cuối cùng có keyframe là 37; các tọa độ từ frame 37 đến 149 đều giống nhau. Hai trường hợp này cần xem lại trong CVAT. Tọa độ và số keyframe không cho biết lý do người gán đặt từng keyframe; thời gian thao tác cũng không được lưu trong ZIP.
+Keyframe / 100 frame của cả bài = 84 ÷ 729 × 100 = **11.5**. Track 1 có nhiều keyframe nhất (27; 18.0/100 frame). Track 4 có 1 keyframe cho 129 frame, đúng với cảnh báo của checker và không khớp P5 tại frame tham chiếu. Track 2 có 9 keyframe nhưng frame cuối cùng có keyframe là 37; các tọa độ từ frame 37 đến 149 đều giống nhau. Hai trường hợp này cần xem lại trong CVAT. Tổng thời gian 120 phút lấy từ giờ bắt đầu/kết thúc ở mục 0; thời gian riêng cho từng track không được lưu trong ZIP hoặc nhật ký.
 
 ## 3. Đoạn bị che (CP2)
 
@@ -65,15 +65,18 @@ Ba ảnh CP2 nằm trong `report/individual/images/`, nhưng file ảnh không c
 
 ## 4. Tự review ID (CP3)
 
-Thông tin được cung cấp chưa có kết quả hai lượt review theo người và theo cảnh. Vì vậy không thể kết luận rằng job không có lỗi hoặc tự đặt số lỗi bằng 0.
+Đối chiếu box trong bản xuất với ảnh video theo số frame CVAT 0–149. Lượt 1 rà chuỗi box/keyframe theo từng track; lượt 2 xem toàn cảnh tại các mốc frame 0, 10, …, 140 và 149. Đây là rà soát bản xuất hiện có, chưa xác nhận hoặc sửa lại trên CVAT.
 
-| Frame | Mã người | Loại lỗi | Mô tả một câu | Phát hiện ở lượt | Đã sửa? |
+| Frame | Mã người / track CVAT | Loại lỗi | Mô tả | Phát hiện ở lượt | Đã sửa? |
 |---:|---|---|---|---|---|
-| Chưa ghi nhận | Chưa ghi | Chưa xác định | Chưa có ghi chép CP3 được cung cấp. | Chưa xác định | Chưa xác định |
+| 2 | P5 / chưa ánh xạ | `lost` | Người tại điểm tham chiếu P5 `(1331, 508)` đang hiện trong ảnh nhưng không có box nào bao phủ. | 1 — rà theo P5 | Chưa; cần thêm track/box đúng người trên CVAT |
+| 37–149 | P4 / Track 2 | Cần xác minh `drift` hoặc `flag` | Track 2 không có keyframe sau frame 37 và box giữ nguyên tọa độ. Ở các frame muộn, người đi ngang che vùng box nên chưa đủ căn cứ kết luận box trôi hay P4 bị che/mất khỏi hình; cần tua lại để kiểm tra box và cờ. | 1 và 2 | Chưa; cần kiểm tra CVAT |
+| 21–149 | Track 4 / người không khớp P5 | `false_track` | Điểm P5 ở frame 2 nằm gần `(1331, 508)`, còn Track 4 bắt đầu tại vùng `(249, 514)–(293, 581)` ở frame 21 và giữ nguyên box đến frame 149; track này không bám người P5 được giao. | 1 và 2 | Chưa; cần xóa/sửa track sai và gán P5 đúng người trên CVAT |
+| 0–149 | P1–P3 / các track đã ánh xạ | Chưa thấy `id_switch`, `fragmentation` hoặc `merge` | Không thấy đổi người, đứt/nối ID hoặc box gộp người tại các mốc cảnh đã đối chiếu; đây chưa phải xác nhận không có lỗi ở mọi frame. | 1 và 2 | — |
 
-Tổng hợp số lỗi theo loại: **chưa thống kê** (`id_switch`, `fragmentation`, `lost`, `merge`, `false_track`, `drift`, `flag`).
+**Tổng hợp theo loại lỗi:** `id_switch`: 0 phát hiện tại các mốc đã đối chiếu; `fragmentation`: 0 phát hiện; `lost`: 1 (P5/frame 2); `merge`: 0 phát hiện; `false_track`: 1 (Track 4); `drift`: chưa kết luận ở Track 2 vì cần xem P4 có di chuyển hay bị che ở các frame muộn; `flag`: chưa kết luận — XML hiện không có frame `occluded` hoặc lần bật `outside`, nhưng cần xem lại video để xác định các cờ có bị thiếu hay không.
 
-Lỗi chỉ phát hiện ở lượt 2: chưa có kết quả review để xác định.
+Các lỗi ghi nhận và mục cần xác minh chưa được sửa trong CVAT. Cần chỉnh track/cờ trên job, xuất lại hai ZIP và cập nhật bảng này theo kết quả kiểm tra mới.
 
 ## 5. File xuất và kết quả tự kiểm (CP4)
 
@@ -132,11 +135,11 @@ Lỗi định dạng: 0; cảnh báo: 1. Cảnh báo là Track 4 có một keyfr
 
 ## 6. Ba câu kết
 
-1. Theo số liệu hiện có, vị trí cần ưu tiên kiểm tra nếu làm lại là Track 4: checker cảnh báo chỉ có một keyframe trong 129 frame. Cần xem box trên CVAT và chỉ kết luận vị trí cần thêm keyframe sau khi kiểm tra chuyển động thực tế.
+1. Ưu tiên sửa P5: người tại điểm tham chiếu frame 2 chưa có box, còn Track 4 bắt đầu ở khu vực khác tại frame 21 và không khớp người được giao. Cần sửa track sai, gán đúng P5 rồi xuất lại; sau đó kiểm tra Track 2/P4 từ frame 37 vì box giữ nguyên tọa độ trong khi vùng này bị người đi ngang che ở các mốc muộn.
 
 2. Chưa có ghi chú về trường hợp phân vân cùng ID hay ID mới, nên chưa thể nêu một quyết định cụ thể hoặc lý do đã ghi trong job.
 
-3. Nếu box Track 4 trôi khỏi người giữa các keyframe, có thể phát sinh box bỏ sót (FN) hoặc box sai vị trí (FP), làm giảm MOTA. Nếu người đó bị gán nhầm ID hoặc đổi ID, tính liên tục định danh bị ảnh hưởng và IDF1 sẽ phản ánh việc giữ ID kém. Đây là giải thích có điều kiện; log hiện tại chưa xác nhận Track 4 thực sự bị trôi hay có lỗi ID.
+3. P5 không có box tại frame tham chiếu và Track 4 không bám P5 có thể tạo FN cho người bị bỏ sót và FP cho track sai, làm giảm MOTA. Nếu Track 2 không còn bám P4 hoặc thiếu cờ che khuất, chất lượng box và liên tục ID cũng có thể bị ảnh hưởng. Chưa có ground truth đối chiếu hoặc kết quả chấm nên báo cáo không tự ước lượng MOTA/IDF1.
 
 ## Bonus (nếu làm)
 
@@ -148,4 +151,4 @@ Hai ZIP hiện tại không chứa dữ liệu bonus; không thể xác nhận B
 - `docs/GUIDELINE.md`, `docs/MOT_FORMAT.md` và `src/lab_variants.json` trong repository.
 - CVAT local server `2.74.1`; log tạo task ghi SDK `2.82.0` và cảnh báo lệch phiên bản.
 - `src/check_submission.py`: đã chạy trên hai ZIP trong `src/exports` để lấy thống kê ở mục 5.
-- ChatGPT/Codex: hỗ trợ đọc cấu trúc và số liệu trong hai ZIP, đối chiếu điểm tham chiếu đề B với box, và biên tập các mục báo cáo ngoài mục 4 và mục 6; không sinh box hoặc track ID.
+- ChatGPT/Codex: hỗ trợ đọc cấu trúc và số liệu trong hai ZIP, đối chiếu điểm tham chiếu đề B với box và ảnh gốc tại các mốc kiểm tra, rà các track có box giữ nguyên lâu, và biên tập các mục 1, 2, 4, 6; không sửa annotation trên CVAT hoặc tự tạo box/track ID.
